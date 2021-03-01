@@ -25,6 +25,18 @@ public class VacinaController {
 		this.repository = repository;
 
 	}
+	
+	@GetMapping("/vacinas")
+	CollectionModel<EntityModel<Vacina>> all() {
+
+	  List<EntityModel<Vacina>> vacinas = repository.findAll().stream()
+	      .map(vacina -> EntityModel.of(vacina,
+	          linkTo(methodOn(VacinaController.class).one(vacina.getId())).withSelfRel(),
+	          linkTo(methodOn(VacinaController.class).all()).withRel("vacinas")))
+	      .collect(Collectors.toList());
+
+	  return CollectionModel.of(vacinas, linkTo(methodOn(VacinaController.class).all()).withSelfRel());
+	}
 
 	
 	@PostMapping("/vacinas")

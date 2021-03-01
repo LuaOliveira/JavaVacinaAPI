@@ -3,10 +3,12 @@ package Usuario;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 // classe da aplicacao de cada vacina
+@Entity
 public class Vacina {
 	
 		
@@ -24,6 +26,14 @@ public class Vacina {
 		this.email_usuario = _email;
 		this.data_vacinacao = _data;
 	
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long _id) {
+		this.id = _id;
 	}
 
 	public String getNome_vacina() {
