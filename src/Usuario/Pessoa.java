@@ -1,6 +1,7 @@
 package Usuario;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -17,18 +18,26 @@ public class Pessoa {
 	private @Id @GeneratedValue  Long id; // generated value diz que o gerenciador dos ids será o provedor de persistencia e não o programador
 	private String nome;
 	private String email;
-	private int cpf;
+	private long cpf;
 	private LocalDate data_nascimento;
 	
 	Pessoa(){}
 	//construtor
-	public Pessoa(String _nome, String _email, int _cpf, LocalDate _data){
+	public Pessoa(String _nome, String _email, long _cpf, LocalDate _data){
 		
 		this.nome = _nome;
 		this.email = _email;
 		this.cpf = _cpf;
 		this.data_nascimento = _data;
 		
+	}
+	
+	public Pessoa(String _nome, String _email, long _cpf, String _data) {
+		this.nome = _nome;
+		this.email = _email;
+		this.cpf = _cpf;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-mm-yyyy");
+		this.data_nascimento = LocalDate.parse(_data, formatter);
 	}
 
 	
@@ -58,11 +67,11 @@ public class Pessoa {
 		this.email = _email;
 	}
 
-	public int getCpf() {
+	public long getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(int _cpf) {
+	public void setCpf(long _cpf) {
 		this.cpf = _cpf;
 	}
 
