@@ -2,7 +2,7 @@ package Usuario;
 
 import java.util.List;
 
-
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 
 @RestController
 public class PessoaController {
@@ -39,12 +41,21 @@ public class PessoaController {
 	}
 	
 	// Single item
-	  
+	/*
+	 * @GetMapping("/pessoas/{id}") Pessoa one(@PathVariable Long id) { //quando a
+	 * pessoa não é encontrada return repository.findById(id) .orElseThrow(() -> new
+	 * PessoaNotFoundException(id)); }
+	 */
+	
 	@GetMapping("/pessoas/{id}")
-	Pessoa one(@PathVariable Long id) {
-	    //quando a pessoa não é encontrada
-	    return repository.findById(id)
+	EntityModel<Pessoa> one(@PathVariable Long id) {
+
+	  Pessoa pessoa = repository.findById(id) //
 	      .orElseThrow(() -> new PessoaNotFoundException(id));
+
+	  return EntityModel.of(pessoa, //
+	      linkTo(methodOn(PessoaController.class).one(id)).withSelfRel(),
+	      linkTo(methodOn(PessoaController.class).all()).withRel("pessoas"));
 	}
 	
 	@PutMapping("/pessoas/{id}")
@@ -66,8 +77,6 @@ public class PessoaController {
 	  void deletePessoa(@PathVariable Long id) {
 	    repository.deleteById(id);
 	  }
-	
-	
 	
 	
 	
