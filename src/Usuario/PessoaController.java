@@ -5,15 +5,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
+// classe que possui os métodos que processam as requests
 @RestController
 public class PessoaController {
 
@@ -38,24 +40,34 @@ public class PessoaController {
 	  // end::get-aggregate-root[]
 	 
 
-	
-	  @GetMapping("/pessoas") CollectionModel<EntityModel<Pessoa>> all() {
-	  
-	  List<EntityModel<Pessoa>> pessoas = repository.findAll().stream() .map(pessoa
-	  -> EntityModel.of(pessoa,
-	  linkTo(methodOn(PessoaController.class).one(pessoa.getId())).withSelfRel(),
-	  linkTo(methodOn(PessoaController.class).all()).withRel("pessoa")))
-	  .collect(Collectors.toList());
-	  
-	  return CollectionModel.of(pessoas,
-	  linkTo(methodOn(PessoaController.class).all()).withSelfRel()); }
-	 
+	/*
+	 * @GetMapping("/pessoas") CollectionModel<EntityModel<Pessoa>> all() {
+	 * 
+	 * List<EntityModel<Pessoa>> pessoas = repository.findAll().stream() .map(pessoa
+	 * -> EntityModel.of(pessoa,
+	 * linkTo(methodOn(PessoaController.class).one(pessoa.getId())).withSelfRel(),
+	 * linkTo(methodOn(PessoaController.class).all()).withRel("pessoa")))
+	 * .collect(Collectors.toList());
+	 * 
+	 * return CollectionModel.of(pessoas,
+	 * linkTo(methodOn(PessoaController.class).all()).withSelfRel()); }
+	 */
 
+	// response code 200
+	/*
+	 * @PostMapping("/pessoas") Pessoa newPessoa(@RequestBody Pessoa newPessoa) {
+	 * 
+	 * return repository.save(newPessoa); }
+	 */
+	
 	@PostMapping("/pessoas")
+	@ResponseStatus(HttpStatus.CREATED)
 	Pessoa newPessoa(@RequestBody Pessoa newPessoa) {
 
 		return repository.save(newPessoa);
 	}
+	
+	
 	// 1º getmapping pessoas
 	// Single item
 	/*
@@ -70,9 +82,9 @@ public class PessoaController {
 		Pessoa pessoa = repository.findById(id) //
 				.orElseThrow(() -> new PessoaNotFoundException(id));
 
-		return EntityModel.of(pessoa, //
-				linkTo(methodOn(PessoaController.class).one(id)).withSelfRel(),
-				linkTo(methodOn(PessoaController.class).all()).withRel("pessoas"));
+		 return EntityModel.of(pessoa, //
+			      linkTo(methodOn(PessoaController.class).one(id)).withSelfRel(),
+			      linkTo(methodOn(PessoaController.class).all()).withRel("pessoas"));
 	}
 
 	@PutMapping("/pessoas/{id}")

@@ -1,7 +1,6 @@
 package Usuario;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -30,14 +29,6 @@ public class Pessoa {
 		this.cpf = _cpf;
 		this.data_nascimento = _data;
 		
-	}
-	
-	public Pessoa(String _nome, String _email, long _cpf, String _data) {
-		this.nome = _nome;
-		this.email = _email;
-		this.cpf = _cpf;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-mm-yyyy");
-		this.data_nascimento = LocalDate.parse(_data, formatter);
 	}
 
 	
@@ -83,7 +74,7 @@ public class Pessoa {
 		this.data_nascimento = _data_nascimento;
 	}
 	
-	// PRA QUE? 
+	
 	@Override
 	  public boolean equals(Object o) {
 
